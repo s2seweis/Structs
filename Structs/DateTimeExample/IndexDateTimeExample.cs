@@ -41,7 +41,22 @@ namespace Structs.DateTimeExample
             DateTime now = DateTime.Now;
             Console.WriteLine("Minute: {0}", now.Minute);
 
-            Console.WriteLine("{0} o'clock {1} minutes and {2} seconds", now.Hour, now.Minute, now.Second);
+            // display the time in this structure x o'clock y minutes and z seconds 
+            Console.WriteLine("Line:1 | {0} o'clock {1} minutes and {2} seconds", now.Hour, now.Minute, now.Second);
+
+            //Counts the days passed since the given date
+            Console.WriteLine("Write a date in this format: yyyy-mm-dd");
+            string input = Console.ReadLine();
+            if(DateTime.TryParse(input, out dateTime))
+            {
+                Console.WriteLine(dateTime);
+                TimeSpan daysPassed = now.Subtract(dateTime);
+                Console.WriteLine("Days passed since: {0}", daysPassed.Days);
+            }
+            else
+            {
+                Console.WriteLine("Wrong Inout!");
+            }
 
         }
 

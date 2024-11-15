@@ -1,0 +1,88 @@
+﻿### Garbage Collection (GC) in C#
+
+Garbage Collection (GC) in C# is a feature of the .NET runtime that **automatically manages memory**, freeing up space for objects that are no longer in use. The GC helps prevent memory leaks and improves application performance by handling memory cleanup so developers don’t have to manually release it.
+
+Let’s break this down:
+
+#### 1. **Managed Heap**
+- The **managed heap** is where all reference types (e.g., objects, strings) are stored in C#.
+- When you create an object using `new`, it is allocated on the heap.
+- The GC tracks these objects and determines when they are no longer needed.
+
+#### 2. **Generations**
+The .NET GC uses **generational garbage collection**, dividing objects into three generations based on their lifespan:
+
+- **Generation 0**: Contains short-lived objects (e.g., temporary variables). This is collected frequently.
+- **Generation 1**: Holds objects that survived one GC cycle. It is considered a buffer between short-lived (Gen 0) and long-lived objects (Gen 2).
+- **Generation 2**: Contains long-lived objects (e.g., static objects, objects that stay in memory for a long time). This is collected less frequently.
+
+The GC usually starts by cleaning **Generation 0** first because most objects are short-lived and can be quickly removed.
+
+#### 3. **Mark-and-Sweep Algorithm**
+The garbage collector uses the **mark-and-sweep** algorithm:
+
+1. **Mark Phase**: The GC traverses all active objects, marking those that are still in use.
+2. **Sweep Phase**: It removes the unmarked (unused) objects from memory, freeing up space.
+
+Additionally, the GC performs **compaction**, where it reorganizes memory to reduce fragmentation, making future allocations faster.
+
+#### 4. **Finalizers and Dispose Pattern**
+If an object needs to release unmanaged resources (e.g., file handles, database connections), you might use:
+
+- **Finalizers** (`~ClassName()`): Called by the GC before an object is destroyed. However, finalizers are not guaranteed to run promptly and may delay memory cleanup.
+- **Dispose Pattern** (`IDisposable`): Allows manual resource cleanup via the `Dispose()` method. The `using` statement in C# is often used to call `Dispose()` automatically.
+
+#### 5. **When Does GC Run?**
+The garbage collector runs:
+
+- When the system has low available memory.
+- When the heap exceeds a certain threshold.
+- Explicitly, if you call `GC.Collect()` (though this is generally discouraged as it can negatively impact performance).
+
+#### Example
+```csharp
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // Allocating a new object
+        MyClass obj = new MyClass();
+
+        // The object is in use here
+        obj.DoSomething();
+
+        // After this line, the object is no longer referenced
+        obj = null;
+
+        // The GC may clean up the object memory at some point after this
+        GC.Collect(); // Not recommended in most cases
+    }
+}
+
+class MyClass
+{
+    ~MyClass()
+    {
+        Console.WriteLine("Finalizer called, object is being collected.");
+    }
+
+    public void DoSomething()
+    {
+        Console.WriteLine("Doing something.");
+    }
+}
+```
+
+In this example:
+- `obj` is allocated on the heap.
+- Once `obj` is set to `null`, there are no more references to it.
+- The GC can then collect the object and call the finalizer (if one exists).
+
+#### **Key Points**
+- The GC improves memory management automatically, reducing the risk of memory leaks.
+- Generations help optimize the GC process by handling short-lived and long-lived objects differently.
+- Manual memory management (e.g., using `Dispose()` or `GC.Collect()`) should be used sparingly and carefully.
+- Understanding the GC helps you write more efficient, resource-friendly applications.
+

@@ -1,5 +1,6 @@
 ﻿using Structs.DateTimeExample;
 using Structs.Enums;
+using Structs.MathClassExample;
 using Structs.StructDistanceExample;
 using Structs.Structs;
 using Structs.ValueTypeVersusReferenceType;
@@ -23,7 +24,9 @@ namespace Structs
 
             //IndexEnumExample indexEnumExample = new IndexEnumExample();
 
-            IndexDateTimeExample indexDateTimeExample = new IndexDateTimeExample();
+            //IndexDateTimeExample indexDateTimeExample = new IndexDateTimeExample();
+
+            IndexMathClassExample indexMathClassExample = new IndexMathClassExample();
 
             Console.ReadKey();
         }
